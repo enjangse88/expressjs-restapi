@@ -2,7 +2,7 @@ const UsersModel = require('../models/users');
 
 const getAllUsers = async (req, res) => {
     try {const [data] = await UsersModel.getAllUsers();
-        res.json({
+        res.status(200).json({
             message: 'Get all users success dari Controller',
             data: data
         })}
@@ -35,9 +35,16 @@ const getAllUsers = async (req, res) => {
 }*/
 const createNewUsers = async (req, res) => {
     const {body} = req;
+    if (!body.name || !body.address){ 
+        return res.status(400).json({
+            message: "Body request tidak lengkap",
+            data: null
+        })
+    }
+    
     try {
         await UsersModel.createNewUsers(body);
-        res.json({
+        res.status(201).json({
             message: 'CREATE new user success',
             data: body
         })
@@ -56,7 +63,7 @@ const updateUsers = async (req, res) => {
 
     try{
         await UsersModel.updateUsers(body,idUser);
-        res.json({
+        res.status(201).json({
             message: 'User update',
             data: {
                 id: idUser,
@@ -77,7 +84,7 @@ const deleteUser = async (req, res) => {
      
     try{
         await UsersModel.deleteUsers(idUser);
-        res.json({
+        res.status(200).json({
             message: 'Delete user success',
         })
     }catch(error) {
